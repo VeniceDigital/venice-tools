@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Venice Platform Match</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;overflow-x:hidden}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff;color:#1F2937;padding:0;margin:0}
+  .pm-wrap{padding:1rem;max-width:680px;margin:0 auto}
+  @media(min-width:480px){.pm-wrap{padding:1.5rem}}
+  .pm-title{font-size:22px;font-weight:700;color:#1A3A5C;margin-bottom:0.6rem}
+  @media(min-width:480px){.pm-title{font-size:26px}}
+  .pm-intro{font-size:15px;color:#374151;margin-bottom:1.5rem;line-height:1.6}
+  @media(min-width:480px){.pm-intro{font-size:16px}}
+  .progress-bar{height:5px;background:#E5E7EB;border-radius:4px;margin-bottom:1.5rem}
+  @media(min-width:480px){.progress-bar{margin-bottom:2rem}}
+  .progress-fill{height:5px;background:#2E6DA4;border-radius:4px;transition:width 0.4s ease}
+  .q-label{font-size:12px;color:#4B5563;margin-bottom:0.35rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em}
+  @media(min-width:480px){.q-label{font-size:13px}}
+  .q-text{font-size:17px;font-weight:700;color:#111827;margin-bottom:0.5rem;line-height:1.4}
+  @media(min-width:480px){.q-text{font-size:19px}}
+  .q-hint{font-size:13px;color:#6B7280;font-style:italic;margin-bottom:1rem}
+  @media(min-width:480px){.q-hint{font-size:14px}}
+  .options{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+  .opt{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid #E5E7EB;border-radius:8px;cursor:pointer;background:#fff;transition:border-color 0.15s,background 0.15s}
+  @media(min-width:480px){.opt{gap:12px;padding:11px 14px}}
+  .opt:hover{border-color:#93C5FD;background:#F0F9FF}
+  .opt.selected{border:2px solid #2E6DA4;background:#EFF6FF}
+  .opt-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;background:#F3F4F6;color:#6B7280}
+  @media(min-width:480px){.opt-icon{width:32px;height:32px;font-size:15px}}
+  .opt-body{flex:1;min-width:0}
+  .opt-title{font-size:14px;font-weight:600;color:#111827;line-height:1.3}
+  @media(min-width:480px){.opt-title{font-size:15px}}
+  .opt-desc{font-size:12px;color:#4B5563;margin-top:2px;line-height:1.4}
+  @media(min-width:480px){.opt-desc{font-size:13px}}
+  .check-icon{color:#2E6DA4;font-size:16px;flex-shrink:0;margin-top:2px}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:0.75rem;gap:8px}
+  .nav-btn{padding:9px 16px;border:1px solid #D1D5DB;border-radius:8px;font-size:14px;cursor:pointer;background:#fff;color:#374151;font-family:inherit;white-space:nowrap}
+  .nav-btn:hover{background:#F9FAFB}
+  .nav-btn.primary{background:#1A3A5C;color:#fff;border-color:#1A3A5C}
+  .nav-btn.primary:hover{background:#2E6DA4;border-color:#2E6DA4}
+  .nav-btn:disabled{opacity:0.3;cursor:not-allowed}
+  .q-counter{font-size:13px;color:#4B5563;font-weight:500;white-space:nowrap}
+  .result-header{text-align:center;padding:0.75rem 0}
+  .result-badge{display:inline-block;padding:4px 12px;border-radius:6px;font-size:12px;font-weight:700;margin-bottom:0.6rem}
+  .result-title{font-size:22px;font-weight:700;color:#111827;margin-bottom:0.5rem}
+  @media(min-width:480px){.result-title{font-size:25px}}
+  .result-sub{font-size:14px;color:#374151;line-height:1.6;max-width:480px;margin:0 auto}
+  @media(min-width:480px){.result-sub{font-size:15px}}
+  .score-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1rem 0}
+  .score-card{background:#F9FAFB;border-radius:8px;padding:10px 12px;border:1px solid #E5E7EB}
+  .score-card.winner{border:2px solid #2E6DA4;background:#EFF6FF}
+  .score-card-name{font-size:12px;color:#374151;margin-bottom:5px;font-weight:700}
+  @media(min-width:480px){.score-card-name{font-size:13px}}
+  .score-bar-bg{height:6px;background:#E5E7EB;border-radius:3px;overflow:hidden}
+  .score-bar-fill{height:6px;border-radius:3px;transition:width 0.7s ease}
+  .score-pct{font-size:11px;color:#6B7280;margin-top:3px;text-align:right}
+  .reasons{background:#F9FAFB;border-radius:8px;padding:12px 14px;margin:0.75rem 0;border:1px solid #E5E7EB}
+  .reasons-title{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+  @media(min-width:480px){.reasons-title{font-size:14px}}
+  .reason-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#374151;line-height:1.4;margin-bottom:5px}
+  .reason-item:last-child{margin-bottom:0}
+  .reason-dot{width:5px;height:5px;border-radius:50%;background:#2E6DA4;flex-shrink:0;margin-top:6px}
+  .budget-warning{background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px;padding:11px 13px;margin:0.75rem 0;font-size:13px;color:#92400E;line-height:1.5}
+  @media(min-width:480px){.budget-warning{font-size:14px}}
+  .alt-section{margin:0.75rem 0}
+  .alt-title{font-size:13px;font-weight:600;color:#4B5563;margin-bottom:6px}
+  .alt-chips{display:flex;gap:6px;flex-wrap:wrap}
+  .alt-chip{padding:4px 10px;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;color:#374151;background:#fff}
+  .divider{height:1px;background:#E5E7EB;margin:0.75rem 0}
+  .consult-note{font-size:13px;color:#374151;line-height:1.6;margin-bottom:1rem}
+  @media(min-width:480px){.consult-note{font-size:14px}}
+  .cta-row{display:flex;gap:8px;flex-wrap:wrap}
+  .cta-btn{flex:1;min-width:120px;padding:11px 14px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;display:block;border:1px solid transparent}
+  .cta-primary{background:#1A3A5C;color:#fff;border-color:#1A3A5C}
+  .cta-primary:hover{background:#2E6DA4}
+  .cta-secondary{background:#F9FAFB;color:#374151;border-color:#D1D5DB}
+  .cta-secondary:hover{background:#F3F4F6}
+  .restart-btn{width:100%;padding:9px;border:1px solid #E5E7EB;border-radius:8px;font-size:13px;cursor:pointer;background:transparent;color:#6B7280;font-family:inherit;margin-top:0.75rem}
+  .restart-btn:hover{color:#374151;border-color:#D1D5DB}
+</style>
+</head>
+<body>
+<div class="pm-wrap">
+  <p class="pm-title">Venice Platform Match</p>
+  <p class="pm-intro">Need to find the best platform match for your business? Answer seven quick questions and we'll score Shopify, Magento, WordPress and Wix against your budget, requirements and growth plans.</p>
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+  <div id="quiz-area"></div>
+</div>
+
+<script>
+const questions=[{id:'budget',label:'Question 1 of 7',text:'What is your approximate budget for the initial website build?',hint:'Include design, development and launch. Exclude ongoing monthly costs.',options:[{icon:'<i class="ti ti-coin"></i>',title:'Under £3,000',desc:'Entry level — quick launch priority',scores:{shopify:1,wix:5,wordpress:1,magento:0},budgetFlag:'entry'},{icon:'<i class="ti ti-coins"></i>',title:'£3,000 to £10,000',desc:'Solid starting budget for a professional build',scores:{shopify:4,wix:3,wordpress:4,magento:0},budgetFlag:'starter'},{icon:'<i class="ti ti-cash"></i>',title:'£10,000 to £30,000',desc:'Mid-range — good scope for a strong ecommerce build',scores:{shopify:5,wix:1,wordpress:4,magento:2},budgetFlag:'mid'},{icon:'<i class="ti ti-building-bank"></i>',title:'£30,000 to £100,000',desc:'Strong investment in a scalable platform',scores:{shopify:3,wix:0,wordpress:3,magento:5},budgetFlag:'high'}]},{id:'revenue',label:'Question 2 of 7',text:'What is your current or projected annual online revenue?',options:[{icon:'<i class="ti ti-seedling"></i>',title:'Pre-revenue or just starting out',desc:'Launching for the first time',scores:{shopify:3,wix:4,wordpress:2,magento:0}},{icon:'<i class="ti ti-trending-up"></i>',title:'Under £500k per year',desc:'Established but growing',scores:{shopify:4,wix:3,wordpress:3,magento:1}},{icon:'<i class="ti ti-building-store"></i>',title:'£500k to £5m per year',desc:'Strong ecommerce operation',scores:{shopify:4,wix:1,wordpress:2,magento:3}},{icon:'<i class="ti ti-building-skyscraper"></i>',title:'Over £5m per year',desc:'High-volume or enterprise level',scores:{shopify:3,wix:0,wordpress:1,magento:5}}]},{id:'products',label:'Question 3 of 7',text:'How many products do you sell or plan to sell?',options:[{icon:'<i class="ti ti-package"></i>',title:'Under 100 products',desc:'Small focused catalogue',scores:{shopify:3,wix:4,wordpress:3,magento:1}},{icon:'<i class="ti ti-packages"></i>',title:'100 to 1,000 products',desc:'Medium catalogue',scores:{shopify:4,wix:2,wordpress:3,magento:2}},{icon:'<i class="ti ti-stack"></i>',title:'1,000 to 10,000 products',desc:'Large catalogue with variants',scores:{shopify:3,wix:0,wordpress:2,magento:4}},{icon:'<i class="ti ti-database"></i>',title:'Over 10,000 products',desc:'Very large or complex catalogue',scores:{shopify:2,wix:0,wordpress:1,magento:5}}]},{id:'tech',label:'Question 4 of 7',text:'What best describes your technical capability?',options:[{icon:'<i class="ti ti-user"></i>',title:'No technical knowledge',desc:'I need everything managed for me',scores:{shopify:4,wix:5,wordpress:1,magento:0}},{icon:'<i class="ti ti-tools"></i>',title:'Some capability',desc:'I can manage content but not code',scores:{shopify:4,wix:3,wordpress:3,magento:0}},{icon:'<i class="ti ti-code"></i>',title:'Comfortable with technology',desc:'I understand websites but am not a developer',scores:{shopify:4,wix:2,wordpress:4,magento:2}},{icon:'<i class="ti ti-terminal-2"></i>',title:'In-house development team',desc:'We have dedicated technical resource',scores:{shopify:3,wix:0,wordpress:4,magento:5}}]},{id:'b2b',label:'Question 5 of 7',text:'Do you have B2B or trade selling requirements?',options:[{icon:'<i class="ti ti-user-check"></i>',title:'No — consumer sales only',desc:'Direct to consumer or retail',scores:{shopify:4,wix:4,wordpress:3,magento:2}},{icon:'<i class="ti ti-users"></i>',title:'Some B2B alongside consumer',desc:'Trade accounts as well as retail',scores:{shopify:3,wix:1,wordpress:2,magento:4}},{icon:'<i class="ti ti-building-factory"></i>',title:'Primarily B2B',desc:'Trade pricing, accounts, purchase orders',scores:{shopify:2,wix:0,wordpress:2,magento:5}},{icon:'<i class="ti ti-network"></i>',title:'Complex B2B',desc:'Multiple tiers, custom workflows, ERP integration',scores:{shopify:1,wix:0,wordpress:1,magento:5}}]},{id:'international',label:'Question 6 of 7',text:'Are you selling or planning to sell internationally?',options:[{icon:'<i class="ti ti-flag"></i>',title:'UK only',desc:'Domestic market focus',scores:{shopify:4,wix:4,wordpress:3,magento:2}},{icon:'<i class="ti ti-world"></i>',title:'A small number of international markets',desc:'Exporting to a few countries',scores:{shopify:4,wix:2,wordpress:3,magento:3}},{icon:'<i class="ti ti-globe"></i>',title:'Multiple international markets',desc:'Multiple currencies and languages',scores:{shopify:3,wix:1,wordpress:2,magento:4}},{icon:'<i class="ti ti-planet"></i>',title:'Complex global operations',desc:'Multiple storefronts, regions and languages',scores:{shopify:2,wix:0,wordpress:1,magento:5}}]},{id:'growth',label:'Question 7 of 7',text:'What best describes your growth plans?',options:[{icon:'<i class="ti ti-home"></i>',title:'Stable — I want a reliable presence',desc:'Professional site, no aggressive expansion plans',scores:{shopify:2,wix:4,wordpress:3,magento:1}},{icon:'<i class="ti ti-chart-line"></i>',title:'Steady growth over time',desc:'Gradual expansion of products and markets',scores:{shopify:4,wix:3,wordpress:3,magento:2}},{icon:'<i class="ti ti-rocket"></i>',title:'Rapid ecommerce growth',desc:'Aggressive sales targets and scaling plans',scores:{shopify:4,wix:1,wordpress:2,magento:4}},{icon:'<i class="ti ti-building-skyscraper"></i>',title:'Enterprise expansion',desc:'Complex operations, integrations and global reach',scores:{shopify:2,wix:0,wordpress:1,magento:5}}]}];
+const platforms={shopify:{name:'Shopify',color:'#96BF48',url:'https://www.venice.co.uk/shopify-website-design-development-uk'},magento:{name:'Magento',color:'#EE672F',url:'https://www.venice.co.uk/magento-web-development-agency'},wordpress:{name:'WordPress',color:'#21759B',url:'https://www.venice.co.uk/wordpress-website-design-development-agency'},wix:{name:'Wix',color:'#116DBF',url:'https://www.venice.co.uk/wix-website-design-development-uk-agency'}};
+const badgeStyles={shopify:'background:#EAF3DE;color:#3B6D11',magento:'background:#FEF0E8;color:#993C1D',wordpress:'background:#E0EEF5;color:#0C447C',wix:'background:#E0EEF8;color:#0C447C'};
+const platformReasons={shopify:['Strong ecommerce focus with powerful built-in selling tools','Scales reliably without requiring a large technical team','Shopify Payments, App Store and multi-channel selling built in','Managed hosting, security and platform updates included','Ideal balance of capability and cost for your budget and scale'],magento:['Built for complex, high-volume ecommerce operations','Unmatched flexibility for bespoke workflows and integrations','Strongest B2B functionality of any major platform','Handles large catalogues, multiple storefronts and global operations','Your budget and technical capability support a Magento investment'],wordpress:['Excellent balance of content marketing and ecommerce capability','WooCommerce extends WordPress into a powerful online store','Large plugin ecosystem for almost any requirement','Strong SEO foundation built into the platform','Flexible and cost-effective within your budget range'],wix:['Fast to launch without technical knowledge or a large budget','Predictable monthly costs with hosting and security included','Easy to manage content, products and pages yourself','Professional results without a large development investment','Ideal starting platform with room to migrate as you grow']};
+const budgetWarnings={shopify:{entry:'Your budget of under £3,000 is below the typical starting point for a professional Shopify build. Shopify is still achievable at this level with a theme-based approach — Venice can advise on what is realistic.',starter:null,mid:null,high:null,enterprise:null},magento:{entry:'Magento is not recommended at this budget level. Open Source Magento projects typically start from £8,000. Shopify or Wix would be a more realistic fit.',starter:'Magento is unlikely to be achievable at this budget. A £3,000–£10,000 budget is better suited to Shopify or WordPress.',mid:'Magento Open Source is possible at the upper end of this budget range, but scope will be limited. Venice would advise carefully on what is achievable.',high:null,enterprise:null},wordpress:{entry:null,starter:null,mid:null,high:null,enterprise:null},wix:{entry:null,starter:null,mid:null,high:null,enterprise:null}};
+let current=0,answers={};
+function getScores(){const totals={shopify:0,magento:0,wordpress:0,wix:0};const maxTotal={shopify:0,magento:0,wordpress:0,wix:0};questions.forEach(q=>{Object.keys(maxTotal).forEach(p=>{maxTotal[p]+=Math.max(...q.options.map(o=>o.scores[p]));});if(answers[q.id]!==undefined){const sel=q.options[answers[q.id]];Object.keys(sel.scores).forEach(p=>totals[p]+=sel.scores[p]);}});const pct={};Object.keys(totals).forEach(p=>pct[p]=Math.round((totals[p]/maxTotal[p])*100));return pct;}
+function getWinner(scores){return Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];}
+function getBudgetFlag(){if(answers.budget===undefined)return null;return questions[0].options[answers.budget].budgetFlag;}
+function renderQuestion(){const q=questions[current];const pct=Math.round((current/questions.length)*100);document.getElementById('prog').style.width=pct+'%';const sel=answers[q.id];const isLast=current===questions.length-1;document.getElementById('quiz-area').innerHTML=`<p class="q-label">${q.label}</p><p class="q-text">${q.text}</p>${q.hint?`<p class="q-hint">${q.hint}</p>`:''}<div class="options">${q.options.map((o,i)=>`<div class="opt${sel===i?' selected':''}" onclick="selectOpt(${i})" role="button" tabindex="0"><div class="opt-icon">${o.icon}</div><div class="opt-body"><div class="opt-title">${o.title}</div><div class="opt-desc">${o.desc}</div></div>${sel===i?'<i class="ti ti-check check-icon"></i>':''}</div>`).join('')}</div><div class="nav"><button class="nav-btn" onclick="prev()" ${current===0?'disabled':''}>Back</button><span class="q-counter">${current+1} of ${questions.length}</span>${isLast?`<button class="nav-btn primary" onclick="showResult()" ${sel===undefined?'disabled':''}>See my recommendation</button>`:`<button class="nav-btn primary" onclick="nextQ()" ${sel===undefined?'disabled':''}>Next</button>`}</div>`;document.querySelectorAll('.opt').forEach((el,i)=>{el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){selectOpt(i);}});});}
+function selectOpt(i){answers[questions[current].id]=i;renderQuestion();}
+function nextQ(){if(answers[questions[current].id]===undefined)return;current++;renderQuestion();}
+function prev(){if(current>0){current--;renderQuestion();}}
+function showResult(){const scores=getScores();const winner=getWinner(scores);const wp=platforms[winner];const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);const alts=sorted.slice(1).map(([p])=>platforms[p].name);const rs=platformReasons[winner].slice(0,3);const budgetFlag=getBudgetFlag();const bw=budgetWarnings[winner]?budgetWarnings[winner][budgetFlag]:null;document.getElementById('prog').style.width='100%';document.getElementById('quiz-area').innerHTML=`<div class="result-header"><div class="result-badge" style="${badgeStyles[winner]}">Recommended platform</div><div class="result-title">${wp.name}</div><div class="result-sub">Based on your answers across all seven criteria, ${wp.name} is the strongest fit for your requirements, budget and growth plans.</div></div><div class="score-grid">${sorted.map(([p,s])=>`<div class="score-card${p===winner?' winner':''}"><div class="score-card-name">${platforms[p].name}${p===winner?' ✓':''}</div><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s}%;background:${platforms[p].color}"></div></div><div class="score-pct">${s}% match</div></div>`).join('')}</div>${bw?`<div class="budget-warning"><strong>Budget consideration:</strong> ${bw}</div>`:''}<div class="reasons"><div class="reasons-title">Why ${wp.name} suits your requirements</div>${rs.map(r=>`<div class="reason-item"><div class="reason-dot"></div>${r}</div>`).join('')}</div><div class="alt-section"><div class="alt-title">Also worth considering</div><div class="alt-chips">${alts.map(a=>`<div class="alt-chip">${a}</div>`).join('')}</div></div><div class="divider"></div><p class="consult-note">This recommendation is based on your answers and provides a strong starting point. Every business is different — Venice is happy to discuss your specific requirements and provide independent advice at no cost.</p><div class="cta-row"><a href="${wp.url}" class="cta-btn cta-primary" target="_blank">Learn about ${wp.name} →</a><a href="https://www.venice.co.uk/contact-venice" class="cta-btn cta-secondary" target="_blank">Talk to Venice</a></div><button class="restart-btn" onclick="restart()">Start again</button>`;}
+function restart(){current=0;answers={};document.getElementById('prog').style.width='0%';renderQuestion();}
+renderQuestion();
+
+// Notify parent (Wix) of height changes so iframe resizes automatically
+function notifyHeight(){
+  var h=document.body.scrollHeight;
+  window.parent.postMessage({type:'resize',height:h},'*');
+}
+var ro=new ResizeObserver(notifyHeight);
+ro.observe(document.body);
+window.addEventListener('load',notifyHeight);
+</script>
+</body>
+</html>
